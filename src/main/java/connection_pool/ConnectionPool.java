@@ -10,10 +10,24 @@ public class ConnectionPool implements Pool<Connection>{
 
     @Override
     public synchronized Connection borrow(){
-        if (!availableConnections.isEmpty() && borrowedConnections < maxConnections){
+        //There are no sufficient connections but there is room for more
+        if(availableConnections.isEmpty() && borrowedConnections < maxConnections){
+            try {
+                addConnection();
+            }catch(Exception e){
+                System.out.println(e.getMessage());
+            }
+            System.out.println("New Connection added");
             borrowedConnections++;
             return availableConnections.poll();
-        }else{
+        }
+
+        //There are connections
+        if(!availableConnections.isEmpty()){
+            borrowedConnections++;
+            return availableConnections.poll();
+        }
+        else{
             throw new NoSuchElementException("No connections available");
         }
     }
@@ -30,7 +44,7 @@ public class ConnectionPool implements Pool<Connection>{
     }
 
     @Override
-    public void initialize() {
+    public synchronized void initialize() {
         availableConnections = new ConcurrentLinkedQueue<>();
         borrowedConnections = 0;
     }
