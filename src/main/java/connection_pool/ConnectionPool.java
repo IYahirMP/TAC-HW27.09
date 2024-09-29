@@ -4,8 +4,8 @@ import java.util.NoSuchElementException;
 import java.util.concurrent.*;
 
 public class ConnectionPool implements Pool<Connection>{
-    private ConcurrentLinkedQueue<Connection> availableConnections = new ConcurrentLinkedQueue<>();
-    private volatile int maxConnections = 5;
+    private volatile ConcurrentLinkedQueue<Connection> availableConnections = new ConcurrentLinkedQueue<>();
+    private volatile int maxConnections = 7;
     private volatile int borrowedConnections = 0;
 
     @Override
@@ -17,7 +17,6 @@ public class ConnectionPool implements Pool<Connection>{
             }catch(Exception e){
                 System.out.println(e.getMessage());
             }
-            System.out.println("New Connection added");
             borrowedConnections++;
             return availableConnections.poll();
         }
@@ -44,9 +43,10 @@ public class ConnectionPool implements Pool<Connection>{
     }
 
     @Override
-    public synchronized void initialize() {
+    public synchronized void initialize(int maxConnections) {
         availableConnections = new ConcurrentLinkedQueue<>();
         borrowedConnections = 0;
+        this.maxConnections = maxConnections;
     }
 
     public synchronized void setMaxConnections(int maxConnections) {

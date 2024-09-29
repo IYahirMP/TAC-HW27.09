@@ -4,5 +4,5 @@ public interface Pool<T> {
     T borrow();
     void release(T obj);
     void shutDown();
-    void initialize();
+    void initialize(int maxConnections);
 }
