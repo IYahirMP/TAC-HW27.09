@@ -7,7 +7,7 @@ public class Main {
     public static void main(String[] args) throws InterruptedException {
         pool.initialize(5);
 
-        ThreadManager threadManager = new ExecutorThreadManager(5);
+        ThreadManager threadManager = new ExecutorServiceThreadManager(5);
         threadManager.testPool(pool);
     }
 }
