@@ -1,9 +1,10 @@
-package thread_management;
+package thread_management.executor_api;
 
 import connection_pool.ConnectionPool;
+import thread_management.task_provider.RunnableService;
+import thread_management.ThreadManager;
 
 import java.util.concurrent.*;
-import java.lang.Runnable;
 
 public class ExecutorThreadManager implements ThreadManager {
     private Executor executor;
@@ -17,13 +18,13 @@ public class ExecutorThreadManager implements ThreadManager {
     private void initializeAbusiveThreads(ConnectionPool pool){
         //Creates threads that are busy
         for(int i = 0; i < threadNumber; i++) {
-            executor.execute(RunnableManager.createAbusiveThread(pool));
+            executor.execute(RunnableService.createAbusiveThread(pool));
         }
     }
 
     private void initializeWaitingThreads(ConnectionPool pool){
         for(int i = 0; i < 2; i++) {
-            executor.execute(RunnableManager.createWaitingThread(pool));
+            executor.execute(RunnableService.createWaitingThread(pool));
         }
     }
 

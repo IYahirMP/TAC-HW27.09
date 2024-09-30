@@ -1,9 +1,11 @@
-package thread_management;
+package thread_management.thread_api;
 
 import java.lang.Thread;
 import java.util.ArrayList;
 
 import connection_pool.ConnectionPool;
+import thread_management.task_provider.RunnableService;
+import thread_management.ThreadManager;
 
 public class ClassicThreadManager implements ThreadManager {
     private ArrayList<Thread> threads;
@@ -17,7 +19,7 @@ public class ClassicThreadManager implements ThreadManager {
     private void initializeAbusiveThreads(ConnectionPool pool){
         //Creates threads that are busy
         for(int i = 0; i < threadNumber; i++) {
-            Thread temp = new Thread(RunnableManager.createAbusiveThread(pool));
+            Thread temp = new Thread(RunnableService.createAbusiveThread(pool));
             threads.add(temp);
             threads.getLast().start();
         }
@@ -25,7 +27,7 @@ public class ClassicThreadManager implements ThreadManager {
 
     private void initializeWaitingThreads(ConnectionPool pool){
         for(int i = 0; i < 2; i++) {
-            Thread temp = new Thread(RunnableManager.createWaitingThread(pool));
+            Thread temp = new Thread(RunnableService.createWaitingThread(pool));
             threads.add(temp);
             threads.getLast().start();
         }
